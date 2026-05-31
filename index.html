@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <base target="_top">
+
+  <?!= include('css/tailwind.css') ?>
+  <?!= include('css/styles.css') ?>
+
+  <script src="https://unpkg.com/alpinejs" defer></script>
+  
+  <script defer> 
+    // Get data from HTML template
+    const colors = JSON.parse(<?= colors ?>);
+  </script> 
+  
+  <?!= include('js/app.js') ?>
+
+</head>
+
+<body class="bg-gray-50 p-8">
+
+  <main class="max-w-3xl mx-auto flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+    
+    <!-- x-data, x-text, x-html -->
+    <div x-data="message">
+      <h1 x-text="name"></h1>
+
+      <p class="text-2xl" x-text="ageText"></p>
+    </div>
+
+    <!-- x-data with methods -->
+    <div x-data="counter">
+      <h1>Counter</h1>
+
+      <p class="text-2xl" x-text="count">0</p>
+
+      <button @click="count++"
+              class="btn btn-info mt-2">
+        Increment
+      </button>
+    </div>
+
+    <!-- x-show -->
+    <div x-data="{ open: false, toggle() { this.open = !this.open }}">
+      <h1>Dropdown</h1>
+
+      <button x-on:click="toggle" class="btn btn-outline-dark">
+        Open/Close
+      </button>
+
+      <div x-show="open"
+           x-cloak
+           x-transition
+           class="bg-gray-200 p-4 mt-3 max-w-sm rounded shadow">
+        Content ...
+      </div>
+    </div>
+
+    <!-- Data-less components -->
+    <div>
+      <h1>Alert</h1>
+      <button class="btn btn-secondary" x-data @click="alert('Hello world')">Click me</button>
+    </div>
+
+    <!-- Data coming from Store -->
+    <div x-data>
+      <h1>Current User</h1>
+
+      <ul>
+        <li>Name: <span x-text="$store.currentUser.name"></span></li>
+        <li>Age: <span x-text="$store.currentUser.age"></span></li>
+        <li>Posts: <span x-text="$store.currentUser.posts"></span></li>
+      </ul>
+    </div>
+
+    <!-- x-init -->
+    <div x-init="console.log('x-init fired')"></div>
+    <div x-data="todos">
+      <h1>Todos</h1>
+
+      <ul>
+        <template x-for="todo in todos" :key="todo.id">
+          <li>
+            <span x-text="todo.title"></span>
+          </li>
+        </template>
+      </ul>
+    </div>
+
+    <!-- x-bind: class  -->
+    <div>
+      <h1>x-bind</h1>
+
+      <div x-data="{ wasClicked: false }">
+        <button class="btn btn-danger mb-2"
+                :class="wasClicked ? 'clicked' : ''"
+                @click="wasClicked = !wasClicked">
+          Click me
+        </button>
+      </div>
+
+      <div x-data="{ wasClicked: false }">
+        <button class="btn btn-warning"
+                :class="{ clicked: wasClicked }"
+                @click="wasClicked = !wasClicked">
+          Click me
+        </button>
+      </div>
+      <style>
+        .clicked {
+          background-color: green !important;
+        }
+      </style>
+    </div>
+
+    <!-- Challenge 1 -->
+    <div x-data="colorBoxes">
+      <h1>Challenge 1</h1>
+
+      <template x-for="color in colors" :key="color">
+        <div class="w-10 h-10 inline-block mr-2" :style="{ backgroundColor: color }"></div>
+      </template>
+    </div>
+
+  </main>
+
+</body>
+
+</html>
